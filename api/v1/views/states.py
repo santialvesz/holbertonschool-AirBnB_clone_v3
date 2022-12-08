@@ -30,7 +30,7 @@ def delete_state(state_id):
     state = storage.get("State", state_id)
     if not state:
         abort(404)
-    state.delete()
+    storage.delete(state)
     storage.save()
     return make_response(jsonify({}), 200)
 
@@ -62,4 +62,4 @@ def put_state(state_id):
             setattr(state, key, value)
 
     storage.save()
-    return jsonify(state.to_dict()), 200
+    return make_response(jsonify(state.to_dict()), 200)
