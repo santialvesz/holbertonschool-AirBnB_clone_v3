@@ -28,11 +28,11 @@ def retrieve_state_id(state_id):
                  strict_slashes=False,)
 def delete_state(state_id):
     state = storage.get("State", state_id)
-    if not state:
+    if state is None:
         abort(404)
     state.delete()
     state.save()
-    return make_response(jsonify({}), 200)
+    return jsonify({}), 200
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -54,10 +54,12 @@ def put_state(state_id):
     if not state:
         abort(404)
     req = request.get_json()
-    if not req:
+    if req is None:
         abort(400, "Not a JSON")
+
     for key, value in req.items():
         if key != 'id' and key != 'created_at' and key != 'updated_at':
             setattr(state, key, value)
+
     storage.save()
-    return make_response(jsonify(state.to_dict()), 200)
+    return jsonify(state.to_dict()), 200
