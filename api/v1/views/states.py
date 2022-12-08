@@ -3,20 +3,20 @@
 handles all default RESTFul API actions"""
 
 from api.v1.views import app_views
-from flask import Flask, jsonify, abort, make_response, request
+from flask import jsonify, abort, make_response, request
 from models import storage
 from models.state import State
 
 
-@app_views.route('/states', strict_slashes=False, methods=['GET'])
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
 def states():
     my_list = []
-    for i in storage.all(State):
+    for i in storage.all("State").values():
         my_list.append(i.to_dict())
     return jsonify(my_list)
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False, methods=['GET'])
+@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def retrieve_state_id(state_id):
     state = storage.get("State", state_id)
     if not state:
@@ -24,7 +24,8 @@ def retrieve_state_id(state_id):
     return jsonify(state.to_dict())
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False, methods=['DELETE'])
+@app_views.route('/states/<state_id>', methods=['DELETE'],
+                 strict_slashes=False,)
 def delete_state(state_id):
     state = storage.get("State", state_id)
     if not state:
@@ -34,7 +35,7 @@ def delete_state(state_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/states', strict_slashes=False, methods=['POST'])
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
     new_state = request.get_json()
     if not new_state:
@@ -47,7 +48,7 @@ def post_state():
     return make_response(jsonify(state.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False, methods=['PUT'])
+@app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def put_state(state_id):
     state = storage.get("State", state_id)
     if not state:
