@@ -23,10 +23,7 @@ def retrieve_user(user_id):
     return jsonify(var)
 
 
-app_views.route('/users/<user_id>', methods=['DELETE'],
-                strict_slashes=False,)
-
-
+@app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False,)
 def del_user(user_id):
     """Deletes a User object"""
     new_user = storage.get(User, user_id)
