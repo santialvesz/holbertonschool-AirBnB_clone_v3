@@ -27,17 +27,17 @@ app_views.route('/users/<user_id>', methods=['DELETE'],
                 strict_slashes=False,)
 
 
-def del_user(amenity_id):
+def del_user(user_id):
     """Deletes a User object"""
-    user = storage.get(User, amenity_id)
-    if not user:
+    new_user = storage.get(User, user_id)
+    if not new_user:
         abort(404)
-    storage.delete(user)
+    storage.delete(new_user)
     storage.save()
     return jsonify({}), 200
 
 
-@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
+@app_views.route('/users', methods=['POST'], strict_slashes=False)
 def post_users():
     """Creates a User"""
     new_user = request.get_json()
@@ -53,11 +53,11 @@ def post_users():
     return make_response(jsonify(users.to_dict()), 201)
 
 
-@app_views.route('/amenities/<amenity_id>',
+@app_views.route('/users/<user_id>',
                  methods=['PUT'], strict_slashes=False)
-def put_user(amenity_id):
+def put_user(user_id):
     """Updates a User object"""
-    new_user = storage.get(User, amenity_id)
+    new_user = storage.get(User, user_id)
     if not new_user:
         abort(404)
     req = request.get_json()
