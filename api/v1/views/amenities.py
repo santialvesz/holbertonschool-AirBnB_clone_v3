@@ -28,7 +28,7 @@ def retrieve_amenities(amenity_id):
                  strict_slashes=False,)
 def del_amenities(amenity_id):
     """Deletes a Amenity object"""
-    amenity = storage.get(Amenity, amenity)
+    amenity = storage.get(Amenity, amenity_id)
     if not amenity:
         abort(404)
     storage.delete()
