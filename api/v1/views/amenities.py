@@ -29,9 +29,9 @@ def retrieve_amenities(amenity_id):
 def delete_amenities(amenity_id):
     """Deletes a Amenity object"""
     obj_amenity = storage.get(Amenity, obj_amenity)
-    if obj_amenity is None:
+    if not obj_amenity:
         abort(404)
-    storage.delete(obj_amenity)
+    storage.delete()
     storage.save()
     return jsonify({}), 200
 
