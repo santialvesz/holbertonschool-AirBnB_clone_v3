@@ -12,9 +12,6 @@ from models.state import State
 def states():
     """Retrieves the list of all State obcjets"""
     my_list = [i.to_dict() for i in storage.all(State).values()]
-    # var = storage.all("State").values()
-    # for i in var:
-    #     my_list.append(i.to_dict())
     return jsonify(my_list)
 
 
