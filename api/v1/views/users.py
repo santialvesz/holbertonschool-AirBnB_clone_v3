@@ -57,16 +57,16 @@ def post_users():
                  methods=['PUT'], strict_slashes=False)
 def put_user(user_id):
     """Updates a User object"""
-    new_user = storage.get(User, user_id)
-    if not new_user:
+    user = storage.get(User, user_id)
+    if not user:
         abort(404)
     req = request.get_json()
-    if req is None:
+    if not req:
         abort(400, "Not a JSON")
-    var = key != 'updated_at'
+
     for key, value in req.items():
-        if key != 'id' and key != 'email' and key != 'created_at' and var:
-            setattr(new_user, key, value)
+        if key not in ['id', 'email', 'created_at', 'updated_at']:
+            setattr(user, key, value)
 
     storage.save()
-    return make_response(jsonify(new_user.to_dict()), 200)
+    return make_response(jsonify(user.to_dict()), 200)
