@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""places.pyyy"""
+"""places.py"""
 
 from api.v1.views import app_views
 from flask import abort, jsonify, make_response, request
