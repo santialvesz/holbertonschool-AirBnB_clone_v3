@@ -26,7 +26,7 @@ def get_reviews(place_id):
                  strict_slashes=False)
 def get_review(review_id):
     """get review information for specified review"""
-    review = storage.get(Review, review_id)
+    review = storage.get("Review", review_id)
     if review is None:
         abort(404)
     return jsonify(review.to_dict())
