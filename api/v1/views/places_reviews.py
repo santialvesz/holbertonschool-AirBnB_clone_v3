@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ places_reviews module """
 from api.v1.views.__init__ import app_views
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models.__init__ import storage
 from models.review import Review
 from models.place import Place
@@ -43,32 +43,27 @@ def delete_review(review_id):
     return jsonify({}), 200
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["POST"])
-def create_review(place_id):
+@app_views.route('/places/<string:place_id>/reviews', methods=['POST'],
+                 strict_slashes=False)
+def post_review(place_id):
+    """create a new review"""
     place = storage.get(Place, place_id)
-    httpDict = request.get_json()
-
-    if not place:
+    if place is None:
         abort(404)
-
-    if not httpDict or type(httpDict) != dict:
-        abort(400, "Not a JSON")
-
-    if "user_id" not in httpDict:
-        abort(400, "Missing user_id")
-    else:
-        user = storage.get(User, httpDict["user_id"])
-        if not user:
-            abort(404)
-
-    if "text" not in httpDict:
-        abort(400, "Missing text")
-
-    httpDict["place_id"] = place_id
-    newReview = Review(**httpDict)
-    newReview.save()
-
-    return jsonify(newReview.to_dict()), 201
+    if not request.get_json():
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
+    kwargs = request.get_json()
+    if 'user_id' not in kwargs:
+        return make_response(jsonify({'error': 'Missing user_id'}), 400)
+    user = storage.get(User, kwargs['user_id'])
+    if user is None:
+        abort(404)
+    if 'text' not in kwargs:
+        return make_response(jsonify({'error': 'Missing text'}), 400)
+    kwargs['place_id'] = place_id
+    review = Review(**kwargs)
+    review.save()
+    return make_response(jsonify(review.to_dict()), 201)
 
 
 @app_views.route("reviews/<review_id>", methods=["PUT"])
