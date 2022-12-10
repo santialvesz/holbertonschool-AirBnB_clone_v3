@@ -13,7 +13,7 @@ from models.user import User
                  strict_slashes=False)
 def get_places(city_id):
     """get place information for all places in a specified city"""
-    city = storage.get("City", city_id)
+    city = storage.get(City, city_id)
     if city is None:
         abort(404)
     places = []
