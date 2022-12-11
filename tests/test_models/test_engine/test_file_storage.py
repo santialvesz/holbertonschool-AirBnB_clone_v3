@@ -16,7 +16,6 @@ from models.state import State
 from models.user import User
 import json
 import os
-from models import storage
 import pep8
 import unittest
 FileStorage = file_storage.FileStorage
